@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search, UserPlus, Trash2, Edit } from "lucide-react";
 import { useForm } from "react-hook-form";
-import axios from "axios"
+import axios from "axios";
 import { url } from "../services/Url";
 import toast from "react-hot-toast";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -39,10 +39,11 @@ const PatientSearchAndManagement = ({ isUser }) => {
     // Filter the results
     const filteredResults = patients.filter(
       (patient) =>
-        patient.UHID?.includes(query) ||
+        patient.UHID?.toLowerCase().includes(query.toLowerCase()) ||
         (patient.name &&
           patient.name.toLowerCase().includes(query.toLowerCase()))
     );
+    
 
     // Use a Set to avoid duplicate UHID entries (you can also use other unique fields)
     const uniqueResults = Array.from(
@@ -85,10 +86,7 @@ const PatientSearchAndManagement = ({ isUser }) => {
   async function OnSubmit(data) {
     setButtonLoading(true);
     try {
-      const response = await axios.post(
-        `${url}/patient/register`,
-        data
-      );
+      const response = await axios.post(`${url}/patient/register`, data);
       // console.log(data);
       if (response.status === 201) {
         toast.success("Patient Added Successfully");
